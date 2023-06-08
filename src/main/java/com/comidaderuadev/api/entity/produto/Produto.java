@@ -1,3 +1,4 @@
+
 package com.comidaderuadev.api.entity.produto;
 
 import jakarta.persistence.Column;

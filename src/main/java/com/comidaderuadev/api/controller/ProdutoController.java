@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.comidaderuadev.api.entity.DTO.ProdutoDTO;
 import com.comidaderuadev.api.entity.produto.Produto;
-import com.comidaderuadev.api.exceptions.produto.ProdutoNotFoundException;
+import com.comidaderuadev.api.exceptions.produto.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
 import com.comidaderuadev.api.repository.ProdutoRepository;
 
@@ -46,12 +46,12 @@ public class ProdutoController {
     public Produto findById(@PathVariable int produtoId){
         return produtoRepository     //   
                 .findById(produtoId) //
-                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado. Id: " + produtoId));
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado. Id: " + produtoId));
 
     }
 
     // Eu nao sei o que fazer com esse ParseExecption então só passei adiante
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Produto addProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
@@ -72,8 +72,8 @@ public class ProdutoController {
     public void updateProduto(@PathVariable int produtoId) throws ParseException {
         Produto produto = produtoRepository
                             .findById(produtoId)
-                            .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado: Id: " + produtoId));
-                            
+                            .orElseThrow(() -> new NotFoundException("Produto não encontrado: Id: " + produtoId));
+
         produtoRepository.delete(produto);
     }
 
@@ -89,7 +89,7 @@ public class ProdutoController {
         Produto produto = modelMapper.map(produtoDTO, Produto.class);
         produto.setCategoria(categoriaRepository
                                 .findById(produtoDTO.getCategoria())
-                                .orElseThrow(() -> new RuntimeException("gusdas")));
+                                .orElseThrow(() -> new NotFoundException("Categoria não encontrada. Id: " + produtoDTO.getCategoria())));
 
 
         return produto;

@@ -6,24 +6,24 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ProdutoExceptionHandler {
+public class ExceptionHandlers {
  
     @ExceptionHandler
-    public ResponseEntity<ProdutoExceptionResponse> handleException(ProdutoNotFoundException exc) {
-        ProdutoExceptionResponse error = new ProdutoExceptionResponse();
+    public ResponseEntity<ExceptionResponse> handleException(NotFoundException exc) {
+        ExceptionResponse error = new ExceptionResponse();
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
-        return new ResponseEntity<ProdutoExceptionResponse>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ExceptionResponse>(error, HttpStatus.NOT_FOUND);
     
     }
 
     @ExceptionHandler
-    public ResponseEntity<ProdutoExceptionResponse> handleException(Exception exc) {
-        ProdutoExceptionResponse error = new ProdutoExceptionResponse();
+    public ResponseEntity<ExceptionResponse> handleException(Exception exc) {
+        ExceptionResponse error = new ExceptionResponse();
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
-        return new ResponseEntity<ProdutoExceptionResponse>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ExceptionResponse>(error, HttpStatus.BAD_REQUEST);
     }
 }

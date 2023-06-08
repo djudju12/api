@@ -1,14 +1,14 @@
 package com.comidaderuadev.api.exceptions.produto;
 
-public class ProdutoExceptionResponse {
+public class ExceptionResponse {
     
     private int status;
     private String message;
     private long timeStamp;
     
-    ProdutoExceptionResponse() {}
+    ExceptionResponse() {}
     
-    public ProdutoExceptionResponse(int status, String message, long timeStamp) {
+    public ExceptionResponse(int status, String message, long timeStamp) {
         this.status = status;
         this.message = message;
         this.timeStamp = timeStamp;
