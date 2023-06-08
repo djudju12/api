@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.entity;
+package com.comidaderuadev.api.entity.produto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,9 +30,10 @@ public class Produto {
 
     Produto() {}
 
-    public Produto(String produtoDescricao, double produtoValor) {
+    public Produto(String produtoDescricao, double produtoValor, Categoria categoria) {
         this.produtoDescricao = produtoDescricao;
         this.produtoValor = produtoValor;
+        this.categoria = categoria;
     }
 
     public int getId() {
@@ -59,4 +60,19 @@ public class Produto {
         this.produtoValor = produtoValor;
     }
 
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto [id=" + id + 
+                ", produtoDescricao=" + produtoDescricao + 
+                ", produtoValor=" + produtoValor+ 
+                ", categoria=" + categoria + "]";
+    }    
 }

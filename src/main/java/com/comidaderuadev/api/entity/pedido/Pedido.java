@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.entity;
+package com.comidaderuadev.api.entity.pedido;
 
 import java.util.Date;
 

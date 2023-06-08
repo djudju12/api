@@ -1,12 +1,11 @@
 package com.comidaderuadev.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comidaderuadev.api.entity.Pedido;
+import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.repository.PedidoRepository;
 
 @RestController
