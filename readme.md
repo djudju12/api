@@ -22,13 +22,15 @@
 
 ### pedidos
 
-| Method | Endpoint                 | Descricao                               |
-| ------ | ------------------------ | --------------------------------------- |
-| GET    | /api/pedidos             | Lista todos os pedidos                  | -> Paginação |
-| GET    | /api/pedidos/:id         | Retorna um produto produto              |
-| GET    | /api/pedidos/:id/details | Retorna um produto produto e seus itens | -> Paginação |
-| POST   | /api/pedidos             | Cria um produto                         |
-| POST   | /api/pedido              | Cria um produto                         |
+| Method | Endpoint                   | Descricao                               |
+| ------ | -------------------------- | --------------------------------------- |
+| GET    | /api/pedidos               | Lista todos os pedidos                  | -> Paginação |
+| GET    | /api/pedidos/:id           | Retorna um produto produto              |
+| POST   | /api/pedidos               | Cria um produto                         |
+| DELETE | /api/pedido                | Deleta um produto                       |
+| GET    | /api/pedidos/:id/itens     | Retorna um produto produto e seus itens | -> Paginação |
+| POST   | /api/pedidos/:id/itens     | Adiciona um novo produto ao pedido      | -> Paginação |
+| Delete | /api/pedidos/:id/itens/:id | Deleta um item produto ao pedido        | -> Paginação |
 
 
 

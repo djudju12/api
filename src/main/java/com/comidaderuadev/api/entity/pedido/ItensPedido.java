@@ -1,6 +1,5 @@
-package com.comidaderuadev.api.entity;
+package com.comidaderuadev.api.entity.pedido;
 
-import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.produto.Produto;
 
 import jakarta.persistence.Column;

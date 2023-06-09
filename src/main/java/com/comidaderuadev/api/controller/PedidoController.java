@@ -61,8 +61,18 @@ public class PedidoController {
         throw new NotFoundException("Pedido não encontrado. Id: " + pedidoId);
     }
 
-    // @GetMapping("/{pedidoId}/details")
-    // public CarrinhoDTO(?) findByIdWithDetails(@PathVariable int pedidoId){
+    // @GetMapping("/{pedidoId}/itens")
+    // public ItensPedidoDTO findByIdWithDetails(@PathVariable int pedidoId){
+        // return null;
+    // }
+
+    // @PostMapping("/{pedidoId}/itens")
+    // public ItensPedidoDTO findByIdWithDetails(@PathVariable int pedidoId){
+        // return null;
+    // }
+
+    // @DeleteMapping("/{pedidoId}/itens/{itensPed}")
+    // public ItensPedidoDTO findByIdWithDetails(@PathVariable int pedidoId){
         // return null;
     // }
 
