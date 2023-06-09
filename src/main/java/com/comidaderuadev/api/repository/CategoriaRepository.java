@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.comidaderuadev.api.entity.produto.Categoria;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
-    
+
+    public Categoria findByDescricao(String descricao);
 }
