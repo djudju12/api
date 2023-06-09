@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comidaderuadev.api.entity.DTO.CategoriaDTO;
-import com.comidaderuadev.api.entity.DTO.ProdutoDTO;
 import com.comidaderuadev.api.entity.produto.Produto;
+import com.comidaderuadev.api.entity.produto.DTO.ProdutoDTO;
 import com.comidaderuadev.api.exceptions.produto.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
 import com.comidaderuadev.api.repository.ProdutoRepository;
@@ -39,33 +38,39 @@ public class ProdutoController {
     }
     
     @GetMapping
-    public List<Produto> findAll(){
-        return produtoRepository.findAll();
+    public List<ProdutoDTO> findAll(){
+        return produtoRepository
+                .findAll()
+                .stream()
+                .map(produto -> convertToDto(produto))
+                .toList();
     }
     
     @GetMapping(value = "/{produtoId}")
-    public Produto findById(@PathVariable int produtoId){
-        return produtoRepository     //   
+    public ProdutoDTO findById(@PathVariable int produtoId){
+        Produto p = produtoRepository     //   
                 .findById(produtoId) //
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado. Id: " + produtoId));
+        
+        return convertToDto(p);
 
     }
 
     // Eu nao sei o que fazer com esse ParseExecption então só passei adiante
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Produto addProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
+    public ProdutoDTO addProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
         produto.setId(0);
         Produto ProdutoCriado = produtoRepository.save(produto);
-        return ProdutoCriado;
+        return convertToDto(ProdutoCriado);
     }
     
     @PutMapping
-    public Produto updateProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
+    public ProdutoDTO updateProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
         Produto ProdutoCriado = produtoRepository.save(produto);
-        return ProdutoCriado;
+        return convertToDto(ProdutoCriado);
     }
     
     @DeleteMapping("/{produtoId}")
@@ -80,17 +85,14 @@ public class ProdutoController {
     
     private ProdutoDTO convertToDto(Produto produto) {
         ProdutoDTO produtoDTO = modelMapper.map(produto, ProdutoDTO.class);
-        produtoDTO.setCategoria_id(produto.getCategoria().getId());
+        produtoDTO.setCategoria(produto.getCategoria().getDescricao());
         return produtoDTO;
 
     }
 
     private Produto convertToEntity(ProdutoDTO produtoDTO) throws ParseException {
         Produto produto = modelMapper.map(produtoDTO, Produto.class);
-        produto.setCategoria(categoriaRepository
-                                .findById(produtoDTO.getCategoria())
-                                .orElseThrow(() -> new NotFoundException("Categoria não encontrada. Id: " + produtoDTO.getCategoria())));
-
+        produto.setCategoria(categoriaRepository.findByDescricao(produtoDTO.getCategoria()));
         return produto;
     }
 }

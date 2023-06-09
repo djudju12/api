@@ -1,10 +1,10 @@
-package com.comidaderuadev.api.entity.DTO;
+package com.comidaderuadev.api.entity.produto.DTO;
 
 public class ProdutoDTO {
     private int id;
     private String produtoDescricao;
     private double produtoValor;
-    private int categoria;
+    private String categoria;
 
     public int getId() {
         return id;
@@ -30,11 +30,11 @@ public class ProdutoDTO {
         this.produtoValor = produtoValor;
     }
 
-    public int getCategoria() {
+    public String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria_id(int categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 }

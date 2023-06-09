@@ -25,7 +25,7 @@
 
 Fiquei na dúvida sobre quando usar o Spring Data Rest.
 Devo usar os endpoints que ele cria automaticamente ou seria melhor
-codar meus esses endpoits? 
+codar esses endpoits? 
 
 Repositório e DAOs, eu escolho um desses padrões pra usar? Uso misturado?
 Quando devo usar um ou outro? Eu nao compreendi bem a diferença entre eles.

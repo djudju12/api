@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.entity.DTO;
+package com.comidaderuadev.api.entity.produto.DTO;
 
 public class CategoriaDTO {
     private String descricao;

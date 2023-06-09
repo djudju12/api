@@ -2,8 +2,6 @@ package com.comidaderuadev.api.controller;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -15,14 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comidaderuadev.api.entity.DTO.CategoriaDTO;
-import com.comidaderuadev.api.entity.DTO.ProdutoDTO;
 import com.comidaderuadev.api.entity.produto.Categoria;
-import com.comidaderuadev.api.entity.produto.Produto;
+import com.comidaderuadev.api.entity.produto.DTO.CategoriaDTO;
+import com.comidaderuadev.api.exceptions.produto.NotFoundException;
+import com.comidaderuadev.api.repository.CategoriaRepository;
 import com.comidaderuadev.api.exceptions.produto.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
 
