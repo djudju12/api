@@ -25,17 +25,15 @@ import com.comidaderuadev.api.repository.ProdutoRepository;
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
-    
-    private ProdutoRepository produtoRepository;
-    private CategoriaRepository categoriaRepository;
-    private ModelMapper modelMapper;
 
     @Autowired
-    public ProdutoController(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
-        this.produtoRepository = produtoRepository;
-        this.categoriaRepository = categoriaRepository;
-        this.modelMapper = modelMapper;
-    }
+    private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
     
     @GetMapping
     public List<ProdutoDTO> findAll(){

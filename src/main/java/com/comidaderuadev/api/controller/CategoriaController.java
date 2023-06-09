@@ -25,15 +25,11 @@ import com.comidaderuadev.api.repository.CategoriaRepository;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    private CategoriaRepository categoriaRepository;
-
-    private ModelMapper modelMapper;
-
     @Autowired
-    public CategoriaController(CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
-        this.categoriaRepository = categoriaRepository;
-        this.modelMapper = modelMapper;
-    }
+    private CategoriaRepository categoriaRepository;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public List<CategoriaDTO> findAll() {

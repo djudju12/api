@@ -25,16 +25,13 @@ import com.comidaderuadev.api.repository.StatusPedidoRepository;
 @RequestMapping("/statusPedidos")
 public class StatusPedidoController {
 
+    @Autowired
     private StatusPedidoRepository statusPedidoRepository;
-    private ModelMapper modelMapper;
 
     @Autowired
-    public StatusPedidoController(StatusPedidoRepository statusPedidoRepository, ModelMapper modelMapper) {
-        this.statusPedidoRepository = statusPedidoRepository;
-        this.modelMapper = modelMapper;
-    }
-    
-  @GetMapping
+    private ModelMapper modelMapper;
+
+    @GetMapping
     public List<StatusPedidoDTO> findAll() {
         return statusPedidoRepository
                 .findAll()

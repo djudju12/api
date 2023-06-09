@@ -22,16 +22,12 @@ import com.comidaderuadev.api.repository.TipoPagamentoRepository;
 @RestController
 @RequestMapping("/tiposPagamentos")
 public class TipoPagamentoController {
-
-    private TipoPagamentoRepository tipoPagamentoRepository;
-
-    private ModelMapper modelMapper;
-
+    
     @Autowired
-    public TipoPagamentoController(TipoPagamentoRepository tipoPagamentoRepository, ModelMapper modelMapper) {
-        this.tipoPagamentoRepository = tipoPagamentoRepository;
-        this.modelMapper = modelMapper;
-    }
+    private TipoPagamentoRepository tipoPagamentoRepository;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public List<TipoPagamentoDTO> findAll(){

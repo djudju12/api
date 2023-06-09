@@ -1,7 +1,5 @@
 package com.comidaderuadev.api.entity;
 
-import org.hibernate.annotations.ManyToAny;
-
 import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.produto.Produto;
 
