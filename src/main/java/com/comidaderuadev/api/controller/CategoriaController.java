@@ -20,8 +20,6 @@ import com.comidaderuadev.api.entity.produto.Categoria;
 import com.comidaderuadev.api.entity.produto.DTO.CategoriaDTO;
 import com.comidaderuadev.api.exceptions.produto.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
-import com.comidaderuadev.api.exceptions.produto.NotFoundException;
-import com.comidaderuadev.api.repository.CategoriaRepository;
 
 @RestController
 @RequestMapping("/categorias")
@@ -35,12 +33,6 @@ public class CategoriaController {
     public CategoriaController(CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
         this.categoriaRepository = categoriaRepository;
         this.modelMapper = modelMapper;
-    }
-
-    @GetMapping("/{descricao}")
-    public CategoriaDTO findByDescricao(@PathVariable String descricao) throws ParseException {
-        Categoria c = categoriaRepository.findByDescricao(descricao);
-        return convertToDto(c);
     }
 
     @GetMapping

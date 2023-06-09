@@ -4,21 +4,32 @@
 
 | Method | Endpoint          | Descricao                  |
 | ------ | ----------------- | -------------------------- |
-| GET    | /api/produtos     | Lista todos os produtos    | -> Paginação
+| GET    | /api/produtos     | Lista todos os produtos    | -> Paginação |
 | GET    | /api/produtos/:id | Retorna um produto produto |
 | POST   | /api/produtos     | Cria um produto            |
 | PUT    | /api/produtos     | Edita um produto           |
 | DELETE | /api/produtos/:id | Deleta um produto          |
 
 
-### Categoria
+### categorias/statusPedidos/tiposPagamentos
 
 | Method | Endpoint                  | Descricao                  |
 | ------ | ------------------------- | -------------------------- |
-| GET    | /api/categorias           | Lista todos os categorias  | -> Paginação
+| GET    | /api/categorias           | Lista todos os categorias  | -> Paginação |
 | GET    | /api/categorias/descricao | Retorna um produto produto |
 | POST   | /api/categorias           | Cria um produto            |
 | DELETE | /api/categorias/descricao | Deleta um produto          |
+
+### pedidos
+
+| Method | Endpoint                 | Descricao                               |
+| ------ | ------------------------ | --------------------------------------- |
+| GET    | /api/pedidos             | Lista todos os pedidos                  | -> Paginação |
+| GET    | /api/pedidos/:id         | Retorna um produto produto              |
+| GET    | /api/pedidos/:id/details | Retorna um produto produto e seus itens | -> Paginação |
+| POST   | /api/pedidos             | Cria um produto                         |
+| POST   | /api/pedido              | Cria um produto                         |
+
 
 
 

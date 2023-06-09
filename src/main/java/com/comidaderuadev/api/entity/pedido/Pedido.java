@@ -29,11 +29,11 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "pedido_status_id")
     private StatusPedido status;
-
-    // @Temporal(TemporalType.DATE)
-    // @Column(name = "pedido_data")
-    // @GeneratedValue(strategy = GenerationType.AUTO)
-    // private Date dataPedido;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "pedido_data")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Date dataPedido;
 
     Pedido() {}
 
@@ -66,12 +66,12 @@ public class Pedido {
         this.status = status;
     }
 
-    // public Date getDataPedido() {
-    //     return dataPedido;
-    // }
+    public Date getDataPedido() {
+        return dataPedido;
+    }
 
-    // public void setDataPedido(Date dataPedido) {
-    //     this.dataPedido = dataPedido;
-    // }
+    public void setDataPedido(Date dataPedido) {
+        this.dataPedido = dataPedido;
+    }
     
 }
