@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.entity;
+package com.comidaderuadev.api.entity.produto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,20 +8,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pedido_status")
-public class StatusPedido {
+@Table(name = "categoria")
+public class Categoria {
     
     @Id
-    @Column(name = "pedido_status_id")
+    @Column(name = "categoria_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "pedido_status_descricao", length = 200)
+    @Column(name = "categoria_descricao", length = 200)
     private String descricao;
 
-    StatusPedido() {}
+    Categoria() {}
 
-    public StatusPedido(String descricao) {
+    public Categoria(String descricao) {
         this.descricao = descricao;
     }
 
@@ -40,5 +40,10 @@ public class StatusPedido {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Categoria [descricao=" + descricao + "]";
+    } 
+
 }
