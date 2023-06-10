@@ -1,5 +1,8 @@
 package com.comidaderuadev.api.entity.pedido;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.comidaderuadev.api.entity.produto.Produto;
 
 import jakarta.persistence.Column;
@@ -26,13 +29,13 @@ public class ItensPedido {
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
-    private Produto produto;
+    private List<Produto> produtos;
 
     ItensPedido() {}
 
-    public ItensPedido(Pedido pedido, Produto produto) {
+    public ItensPedido(Pedido pedido) {
         this.pedido = pedido;
-        this.produto = produto;
+        this.produtos = new ArrayList<>();
     }
 
     public int getId() {
@@ -51,11 +54,25 @@ public class ItensPedido {
         this.pedido = pedido;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
     }
+
+    public void addProduto(Produto produto) {
+        if (this.produtos == null) 
+            this.produtos = new ArrayList<>();
+            
+        this.produtos.add(produto);
+    }
+
+   @Override
+   public String toString() {
+      return "ItensPedido [id=" + id + ", pedido=" + pedido + ", produtos=" + produtos + "]";
+   }
+
+    
 }
