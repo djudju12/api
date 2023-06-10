@@ -29,13 +29,14 @@ public class ItensPedido {
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
-    private List<Produto> produtos;
+    private Produto produto;
 
     ItensPedido() {}
 
-    public ItensPedido(Pedido pedido) {
+    public ItensPedido(Pedido pedido, Produto produto) {
         this.pedido = pedido;
-        this.produtos = new ArrayList<>();
+        this.produto = produto;
+        pedido.addItem(this);
     }
 
     public int getId() {
@@ -54,25 +55,12 @@ public class ItensPedido {
         this.pedido = pedido;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
+    public Produto getProduto() {
+        return produto;
     }
 
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
-
-    public void addProduto(Produto produto) {
-        if (this.produtos == null) 
-            this.produtos = new ArrayList<>();
-            
-        this.produtos.add(produto);
-    }
-
-   @Override
-   public String toString() {
-      return "ItensPedido [id=" + id + ", pedido=" + pedido + ", produtos=" + produtos + "]";
-   }
-
     
 }

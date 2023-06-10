@@ -113,7 +113,7 @@ public class ProdutoController {
     private Produto convertToEntity(ProdutoDTO produtoDTO) throws ParseException {
         Produto produto = modelMapper.map(produtoDTO, Produto.class);
         produto.setCategoria(categoriaService.findByDescricao(produtoDTO.getCategoria()));
-        return produto;
+        return produto; 
     }
 
     private CategoriaDTO convertToDto(Categoria categoria) {

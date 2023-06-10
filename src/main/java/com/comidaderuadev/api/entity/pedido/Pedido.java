@@ -1,6 +1,8 @@
 package com.comidaderuadev.api.entity.pedido;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -35,11 +38,15 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Date dataPedido;
 
+    @OneToMany(mappedBy = "pedido")
+    private List<ItensPedido> itens;
+
     Pedido() {}
 
     public Pedido(TipoPagamento tipoPagamento, StatusPedido status) {
         this.tipoPagamento = tipoPagamento;
         this.status = status;
+        this.itens = new ArrayList<>();
     }
 
     public int getId() {
@@ -72,6 +79,22 @@ public class Pedido {
 
     public void setDataPedido(Date dataPedido) {
         this.dataPedido = dataPedido;
+    }
+
+    public List<ItensPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItensPedido> itens) {
+        this.itens = itens;
+    }
+
+    public void addItem(ItensPedido item) {
+        itens.add(item);
+    }
+
+    public void removeItem(ItensPedido item) {
+        itens.remove(item);
     }
     
 }

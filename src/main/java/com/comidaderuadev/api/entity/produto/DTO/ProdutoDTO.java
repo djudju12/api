@@ -1,6 +1,7 @@
 package com.comidaderuadev.api.entity.produto.DTO;
 
 public class ProdutoDTO {
+
     private int id;
     private String produtoDescricao;
     private double produtoValor;

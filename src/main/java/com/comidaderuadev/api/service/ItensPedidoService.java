@@ -7,9 +7,9 @@ import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.produto.Produto;
 
 public interface ItensPedidoService {
-    public List<ItensPedido> findAll();
-    public ItensPedido findByPedido(Pedido pedido);
-    public ItensPedido addItensPedido(ItensPedido pedido);
-    public ItensPedido addProdutoCarrinho(Produto produto);
-    public ItensPedido addProdutosCarrinho(List<Produto> produtos);
+    // public List<ItensPedido> findAll();
+    // public ItensPedido findByPedido(Pedido pedido);
+    // public void removeProdutoCarrinho(Produto produto);
+    // public ItensPedido addProdutosCarrinho(List<Produto> produtos);
+    public List<ItensPedido> findByPedido(Pedido pedido);
 }
