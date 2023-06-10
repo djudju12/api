@@ -47,7 +47,7 @@ public class ProdutoController {
     @GetMapping(value = "/{produtoId}")
     public ProdutoDTO findById(@PathVariable int produtoId){
         Produto p = produtoRepository     //   
-                .findById(produtoId) //
+                .findById(produtoId)      //
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado. Id: " + produtoId));
         
         return convertToDto(p);
