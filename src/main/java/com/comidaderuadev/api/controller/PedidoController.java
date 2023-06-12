@@ -104,6 +104,14 @@ public class PedidoController {
         return pedidoDTO;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PedidoDTO addPedido(@RequestBody PedidoDTO pedidoDTO) {
+        Pedido pedido = convertToEntity(pedidoDTO);
+        Pedido pedidoCriado = pedidoService.add(pedido);
+        return convertToDTO(pedidoCriado);
+    }
+
     @PostMapping("/{pedidoId}/itens/{produtoId}")
     public PedidoDetalhadoDTO findByIdWithDetails(@PathVariable int pedidoId, @PathVariable int produtoId) {
         Pedido pedido = pedidoService.findById(pedidoId);
@@ -133,7 +141,7 @@ public class PedidoController {
         itensPedidoService.removeProdutoCarrinho(pedidoId, produtoId);
     }
 
-    @DeleteMapping("/stauts/{descricao}")
+    @DeleteMapping("/status/{descricao}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteStatus(@PathVariable String descricao) {
         StatusPedido statusPedido = statusPedidoService.findByDescricao(descricao);
@@ -150,17 +158,10 @@ public class PedidoController {
         tipoPagamentoService.delete(tipoPagamento);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PedidoDTO addPedido(@RequestBody PedidoDTO pedidoDTO) {
+    @PutMapping("/{pedidoId}")
+    public PedidoDTO updatePedido(@RequestBody PedidoDTO pedidoDTO, @PathVariable int pedidoId) {
         Pedido pedido = convertToEntity(pedidoDTO);
-        Pedido pedidoCriado = pedidoService.add(pedido);
-        return convertToDTO(pedidoCriado);
-    }
-
-    @PutMapping
-    public PedidoDTO updatePedido(@RequestBody PedidoDTO pedidoDTO) {
-        Pedido pedido = convertToEntity(pedidoDTO);
+        pedido.setId(pedidoId);
         Pedido pedidoEditado = pedidoService.update(pedido);
         return convertToDTO(pedidoEditado);
     }
@@ -202,14 +203,7 @@ public class PedidoController {
     }
 
     private StatusPedido convertToEntity(StatusPedidoDTO statusPedidoDTO) throws ParseException {
-        StatusPedido statusPedido = statusPedidoService.findByDescricao(statusPedidoDTO.getDescricao());
-
-        if (statusPedido == null) {
-            return modelMapper.map(statusPedidoDTO, StatusPedido.class);
-        }
-
-        return statusPedido;
-
+        return modelMapper.map(statusPedidoDTO, StatusPedido.class);
     }
 
     private TipoPagamentoDTO convertToDTO(TipoPagamento tipoPagamento) {
@@ -217,12 +211,7 @@ public class PedidoController {
     }
 
     private TipoPagamento convertToEntity(TipoPagamentoDTO tipoPagamentoDTO) {
-        TipoPagamento tipoPagamento = tipoPagamentoService.findByDescricao(tipoPagamentoDTO.getDescricao());
-
-        if (tipoPagamento == null)
-            return modelMapper.map(tipoPagamentoDTO, TipoPagamento.class);
-
-        return tipoPagamento;
+        return modelMapper.map(tipoPagamentoDTO, TipoPagamento.class);
     }
 
 }

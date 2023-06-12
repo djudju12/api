@@ -1,5 +1,6 @@
 package com.comidaderuadev.api.entity.pedido.DTO;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class PedidoDTO {
@@ -7,7 +8,7 @@ public class PedidoDTO {
     private int pedidoId;
     private String pedidoTipoPagamento;
     private String pedidoStatus;
-    private Date pedidoData;
+    private LocalDateTime pedidoData;
 
     public int getPedidoId() {
         return pedidoId;
@@ -27,11 +28,12 @@ public class PedidoDTO {
     public void setPedidoStatus(String pedidoStatus) {
         this.pedidoStatus = pedidoStatus;
     }
-    public Date getPedidoData() {
+    public LocalDateTime getPedidoData() {
         return pedidoData;
     }
-    public void setPedidoData(Date pedidoData) {
+    public void setPedidoData(LocalDateTime pedidoData) {
         this.pedidoData = pedidoData;
     }
+
 
 }

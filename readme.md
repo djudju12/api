@@ -2,46 +2,34 @@
 
 ### Produto
 
-| Method | Endpoint          | Descricao                  |
-| ------ | ----------------- | -------------------------- |
-| GET    | /api/produtos     | Lista todos os produtos    | -> Paginação |
-| GET    | /api/produtos/:id | Retorna um produto produto |
-| POST   | /api/produtos     | Cria um produto            |
-| PUT    | /api/produtos     | Edita um produto           |
-| DELETE | /api/produtos/:id | Deleta um produto          |
-
-
-### categorias/statusPedidos/tiposPagamentos
-
-| Method | Endpoint                  | Descricao                  |
-| ------ | ------------------------- | -------------------------- |
-| GET    | /api/categorias           | Lista todos os categorias  | -> Paginação |
-| GET    | /api/categorias/descricao | Retorna um produto produto |
-| POST   | /api/categorias           | Cria um produto            |
-| DELETE | /api/categorias/descricao | Deleta um produto          |
-
-### pedidos
-
-| Method | Endpoint                   | Descricao                               |
-| ------ | -------------------------- | --------------------------------------- |
-| GET    | /api/pedidos               | Lista todos os pedidos                  | -> Paginação |
-| GET    | /api/pedidos/:id           | Retorna um produto produto              |
-| POST   | /api/pedidos               | Cria um produto                         |
-| DELETE | /api/pedido                | Deleta um produto                       |
-| GET    | /api/pedidos/:id/itens     | Retorna um produto produto e seus itens | -> Paginação |
-| POST   | /api/pedidos/:id/itens     | Adiciona um novo produto ao pedido      | -> Paginação |
-| Delete | /api/pedidos/:id/itens/:id | Deleta um item produto ao pedido        | -> Paginação |
+| Method | Endpoint                                      | Descricao                  |
+| ------ | --------------------------------------------- | -------------------------- |
+| GET    | /api/produtos                                 | Lista todos os produtos    |
+| GET    | /api/produtos/categorias                      | Lista todas as categorias  |
+| GET    | /api/produtos/{produtoId}                     | Retorna um produto produto |
+| POST   | /api/produtos                                 | Cria um produto            |
+| POST   | /api/produtos/categorias                      | cria uma categoria         |
+| PUT    | /api/produtos                                 | Edita um produto           |
+| DELETE | /api/produtos/{produtoId}                     | Deleta um produto          |
+| DELETE | /api/produtos/categorias/{categoriaDescricao} | deleta uma categoria       |
 
 
 
+### Pedidos
 
-
-Fiquei na dúvida sobre quando usar o Spring Data Rest.
-Devo usar os endpoints que ele cria automaticamente ou seria melhor
-codar esses endpoits? 
-
-Repositório e DAOs, eu escolho um desses padrões pra usar? Uso misturado?
-Quando devo usar um ou outro? Eu nao compreendi bem a diferença entre eles.
-
-Exceptions. Qual seria a melhor prática, criar uma classe mais generica 
-tipo NotFound ou criar algo mais especifico tipo ProdutoNotFound e CategoriaNotFound?
+| Method | Endpoint                                              | Descricao                                           |
+| ------ | ----------------------------------------------------- | --------------------------------------------------- |
+| GET    | /api/pedidos                                          | Lista todos os pedidos sem detalhe dos itens        |
+| GET    | /api/pedidos/{pedidoId}                               | Retorna um pedido sem detalhe dos itens             |
+| GET    | /api/pedidos/itens                                    | Lista todos os pedidos com deltahes dos itens       |
+| GET    | /api/pedidos/{pedidoId}/itens                         | Retorna um pedido com deltahes dos itens            |
+| GET    | /api/pedidos/status                                   | Lista os status possiveis de um pedido              |
+| GET    | /api/pedidos/tiposPagamentos                          | Lista os tipos de pagamentos possiveis de um pedido |
+| PUT    | /api/pedidos                                          | Edita o pedido                                      |
+| POST   | /api/pedidos                                          | Cria um novo pedido                                 |
+| POST   | /api/pedidos/{pedidoId}/itens/{produtoId}             | Adiciona o produto ao pedido                        |
+| POST   | /api/pedidos/status                                   | Cria um novo status                                 |
+| POST   | /api/pedidos/tiposPagamentos                          | cria um novo tipo de pagamento                      |
+| DELETE | /api/pedidos/{pedidoId}/itens/{produtoId}             | Delete todos os produto do pedido                   |
+| DELETE | /api/pedidos/status/{descricaoStatus}                 | Deleta o status                                     |
+| DELETE | /api/pedidos/tiposPagamentos/{descricaoTipoPagamento} | Deleta o tipo pagamento                             |

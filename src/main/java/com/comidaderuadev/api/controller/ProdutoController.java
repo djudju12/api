@@ -77,9 +77,10 @@ public class ProdutoController {
         return convertToDto(categoriaCriada);
     }
 
-    @PutMapping
-    public ProdutoDTO updateProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
+    @PutMapping("/{produtoId}")
+    public ProdutoDTO updateProduto(@RequestBody ProdutoDTO produtoDTO, @PathVariable int produtoId) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
+        produto.setId(produtoId);
         Produto produtoAtualizado = produtoService.update(produto);
         return convertToDto(produtoAtualizado);
     }
@@ -121,13 +122,8 @@ public class ProdutoController {
     }
 
     private Categoria convertToEntity(CategoriaDTO categoriaDTO) throws ParseException {
-        Categoria categoria = categoriaService.findByDescricao(categoriaDTO.getDescricao());
-
-        if (categoria == null) {
-            return modelMapper.map(categoriaDTO, Categoria.class);
-        }
-
-        return categoria;
+        
+        return modelMapper.map(categoriaDTO, Categoria.class);
 
     }
 }

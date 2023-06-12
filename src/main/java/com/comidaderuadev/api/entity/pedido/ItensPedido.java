@@ -1,7 +1,5 @@
 package com.comidaderuadev.api.entity.pedido;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import com.comidaderuadev.api.entity.produto.Produto;
 import com.fasterxml.jackson.annotation.JsonIgnore;

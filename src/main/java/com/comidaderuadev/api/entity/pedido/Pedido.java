@@ -1,8 +1,13 @@
 package com.comidaderuadev.api.entity.pedido;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,10 +39,9 @@ public class Pedido {
     @JoinColumn(name = "pedido_status_id")
     private StatusPedido status;
     
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "pedido_data")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Date dataPedido;
+    @CreationTimestamp
+    private LocalDateTime dataPedido;
 
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<ItensPedido> itens;
@@ -74,13 +78,6 @@ public class Pedido {
         this.status = status;
     }
 
-    public Date getDataPedido() {
-        return dataPedido;
-    }
-
-    public void setDataPedido(Date dataPedido) {
-        this.dataPedido = dataPedido;
-    }
 
     public List<ItensPedido> getItens() {
         return itens;
@@ -96,6 +93,14 @@ public class Pedido {
 
     public void removeItem(ItensPedido item) {
         itens.remove(item);
+    }
+
+    public LocalDateTime getDataPedido() {
+        return dataPedido;
+    }
+
+    public void setDataPedido(LocalDateTime dataPedido) {
+        this.dataPedido = dataPedido;
     }
     
 }

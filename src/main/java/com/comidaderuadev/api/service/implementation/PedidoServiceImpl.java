@@ -47,8 +47,10 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Pedido update(Pedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        if (pedidoRepository.existsById(pedido.getId()))
+            return pedidoRepository.save(pedido);
+
+        throw new NotFoundException("Pedido não encontrado. Pedido: " + pedido);
     }
 
     @Override

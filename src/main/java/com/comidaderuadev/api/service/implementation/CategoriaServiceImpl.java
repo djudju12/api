@@ -10,6 +10,8 @@ import com.comidaderuadev.api.exceptions.produto.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
 import com.comidaderuadev.api.service.CategoriaService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
 
@@ -36,6 +38,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    @Transactional
     public void delete(String categoriaDescricao) {
         Categoria c = categoriaRepository.findByDescricao(categoriaDescricao)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada. Categoria: " + categoriaDescricao));
