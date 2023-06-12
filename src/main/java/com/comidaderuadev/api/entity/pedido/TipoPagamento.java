@@ -42,4 +42,9 @@ public class TipoPagamento {
         this.descricao = descricao;
     }
 
+    @Override
+    public String toString() {
+        return "TipoPagamento [id=" + id + ", descricao=" + descricao + "]";
+    }
+
 }

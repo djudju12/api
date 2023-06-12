@@ -71,11 +71,9 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public void removeProduto(int itensPedidoId) {
-
-        ItensPedido item = itensPedidoRepository.findById(itensPedidoId)
-                .orElseThrow(() -> new NotFoundException("Item nao encontrado. Id: " + itensPedidoId));
-        itensPedidoRepository.delete(item);
+    public List<Pedido> findAllWithDetail() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllWithDetail'");
     }
 
 }

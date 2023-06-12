@@ -5,11 +5,10 @@ import com.comidaderuadev.api.entity.produto.DTO.ProdutoDTO;
 public class ItensPedidoDTO {
 
     private ProdutoDTO produto;
-    
     private int id;
 
 
-    public int getPedidoId() {
+    public int getId() {
         return id;
     }
 

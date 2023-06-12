@@ -16,5 +16,4 @@ public class ApiApplication {
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
-
 }

@@ -7,17 +7,22 @@ import org.springframework.stereotype.Service;
 
 import com.comidaderuadev.api.entity.pedido.ItensPedido;
 import com.comidaderuadev.api.entity.pedido.Pedido;
+import com.comidaderuadev.api.exceptions.produto.NotFoundException;
 import com.comidaderuadev.api.repository.ItensPedidoRepository;
+import com.comidaderuadev.api.repository.PedidoRepository;
+import com.comidaderuadev.api.repository.ProdutoRepository;
 import com.comidaderuadev.api.service.ItensPedidoService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ItensPedidoServiceImpl implements ItensPedidoService {
 
-//     @Autowired
-//     private ProdutoRepository produtoRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
-//     @Autowired
-//     private PedidoRepository pedidoRepository;
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     @Autowired
     private ItensPedidoRepository itensPedidoRepository;
@@ -31,6 +36,18 @@ public class ItensPedidoServiceImpl implements ItensPedidoService {
     public List<ItensPedido> findByPedido(Pedido pedido) {
         List<ItensPedido> carrinho = itensPedidoRepository.findByPedido(pedido);
         return carrinho;
+    }
+
+    @Transactional
+    @Override
+    public void removeProdutoCarrinho(int pedidoId, int produtoId) {
+        if (!pedidoRepository.existsById(pedidoId))
+            throw new NotFoundException("Pedido não encontrado. id: " + pedidoId);
+        
+        if (!produtoRepository.existsById(produtoId))
+            throw new NotFoundException("Produto não encontrado. id: " + produtoId);
+
+        itensPedidoRepository.removeByPedidoIdAndProdutoId(pedidoId, produtoId);
     }
 
 //     @Override

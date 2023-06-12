@@ -1,36 +1,34 @@
 package com.comidaderuadev.api.controller;
 
+import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comidaderuadev.api.entity.pedido.ItensPedido;
 import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.pedido.StatusPedido;
 import com.comidaderuadev.api.entity.pedido.TipoPagamento;
-import com.comidaderuadev.api.entity.pedido.DTO.ItensPedidoDTO;
 import com.comidaderuadev.api.entity.pedido.DTO.PedidoDTO;
+import com.comidaderuadev.api.entity.pedido.DTO.PedidoDetalhadoDTO;
+import com.comidaderuadev.api.entity.pedido.DTO.StatusPedidoDTO;
+import com.comidaderuadev.api.entity.pedido.DTO.TipoPagamentoDTO;
 import com.comidaderuadev.api.entity.produto.Produto;
-import com.comidaderuadev.api.entity.produto.DTO.ProdutoDTO;
 import com.comidaderuadev.api.exceptions.produto.NotFoundException;
-import com.comidaderuadev.api.repository.ItensPedidoRepository;
-import com.comidaderuadev.api.repository.PedidoRepository;
-import com.comidaderuadev.api.repository.StatusPedidoRepository;
-import com.comidaderuadev.api.repository.TipoPagamentoRepository;
 import com.comidaderuadev.api.service.ItensPedidoService;
 import com.comidaderuadev.api.service.PedidoService;
 import com.comidaderuadev.api.service.ProdutoService;
+import com.comidaderuadev.api.service.StatusPedidoService;
+import com.comidaderuadev.api.service.TipoPagamentoService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -46,10 +44,10 @@ public class PedidoController {
     private ItensPedidoService itensPedidoService;
 
     @Autowired
-    private StatusPedidoRepository statusPedidoRepository;
+    private StatusPedidoService statusPedidoService;
 
     @Autowired
-    private TipoPagamentoRepository tipoPagamentoRepository;
+    private TipoPagamentoService tipoPagamentoService;
 
     @Autowired
     private ProdutoService produtoService;
@@ -66,30 +64,91 @@ public class PedidoController {
                 .toList();
     }
 
+    @GetMapping("/itens")
+    public List<PedidoDetalhadoDTO> findAllWithDetail() {
+        return pedidoService
+                .findAll()
+                .stream()
+                .map(pedido -> convertToDetailedDTO(pedido))
+                .toList();
+    }
+
+    @GetMapping("/status")
+    public List<StatusPedidoDTO> findAllStatus() {
+        return statusPedidoService
+                .findAll()
+                .stream()
+                .map((status) -> convertToDto(status))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/tiposPagamentos")
+    public List<TipoPagamentoDTO> findAllTiposPagamentos() {
+        return tipoPagamentoService
+                .findAll()
+                .stream()
+                .map(tipoPagamento -> convertToDTO(tipoPagamento))
+                .toList();
+    }
+
     @GetMapping("/{pedidoId}")
     public PedidoDTO findById(@PathVariable int pedidoId) {
         Pedido p = pedidoService.findById(pedidoId);
         return convertToDTO(p);
     }
 
-    // @GetMapping("/{pedidoId}/itens")
-    // public Pedido findByIdWithDetails(@PathVariable int pedidoId){
-    // return null;
-    // }
+    @GetMapping("/{pedidoId}/itens")
+    public PedidoDetalhadoDTO findByIdWithDetails(@PathVariable int pedidoId) {
+        Pedido pedido = pedidoService.findById(pedidoId);
+        PedidoDetalhadoDTO pedidoDTO = convertToDetailedDTO(pedido);
+        return pedidoDTO;
+    }
 
     @PostMapping("/{pedidoId}/itens/{produtoId}")
-    public PedidoDTO findByIdWithDetails(@PathVariable int pedidoId, @PathVariable int produtoId) {
+    public PedidoDetalhadoDTO findByIdWithDetails(@PathVariable int pedidoId, @PathVariable int produtoId) {
         Pedido pedido = pedidoService.findById(pedidoId);
         Produto produto = produtoService.findById(produtoId);
 
         Pedido pedidoCriado = pedidoService.addProduto(pedido, produto);
-        return convertToDTO(pedidoCriado);
+        return convertToDetailedDTO(pedidoCriado);
     }
 
-    // @DeleteMapping("/{pedidoId}/itens/{itensPed}")
-    // public ItensPedidoDTO findByIdWithDetails(@PathVariable int pedidoId){
-    // return null;
-    // }
+    @PostMapping("/status")
+    @ResponseStatus(HttpStatus.CREATED)
+    public StatusPedidoDTO addStatus(@RequestBody StatusPedidoDTO statusPedidoDTO) throws ParseException {
+        StatusPedido statusPedido = convertToEntity(statusPedidoDTO);
+        return convertToDto(statusPedidoService.add(statusPedido));
+    }
+
+    @PostMapping("/tiposPagamentos")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TipoPagamentoDTO addTipoPagamento(@RequestBody TipoPagamentoDTO tipoPagamentoDTO) {
+        TipoPagamento tipoPagamento = convertToEntity(tipoPagamentoDTO);
+        return convertToDTO(tipoPagamentoService.add(tipoPagamento));
+    }
+
+    @DeleteMapping("/{pedidoId}/itens/{produtoId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteProduto(@PathVariable int pedidoId, @PathVariable int produtoId) {
+        itensPedidoService.removeProdutoCarrinho(pedidoId, produtoId);
+    }
+
+    @DeleteMapping("/stauts/{descricao}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteStatus(@PathVariable String descricao) {
+        StatusPedido statusPedido = statusPedidoService.findByDescricao(descricao);
+        if (statusPedido == null)
+            throw new NotFoundException("Produto não encontrado. Descricao: " + descricao);
+
+        statusPedidoService.delete(statusPedido);
+    }
+
+    @DeleteMapping("/tiposPagamentos/{descricao}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTipoPagamento(@PathVariable String descricao) {
+        TipoPagamento tipoPagamento = tipoPagamentoService.findByDescricao(descricao);
+        tipoPagamentoService.delete(tipoPagamento);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -110,25 +169,19 @@ public class PedidoController {
         PedidoDTO pedidoDTO = modelMapper.map(pedido, PedidoDTO.class);
         pedidoDTO.setPedidoStatus(pedido.getStatus().getDescricao());
         pedidoDTO.setPedidoTipoPagamento(pedido.getTipoPagamento().getDescricao());
-        pedidoDTO.setItens(
-            itensPedidoService
-                .findByPedido(pedido)
-                .stream()
-                .map(item -> convertToDTO(item))
-                .toList());
         return pedidoDTO;
     }
 
-    private ItensPedidoDTO convertToDTO(ItensPedido item) {
-        ItensPedidoDTO itensPedidoDTO = modelMapper.map(item, ItensPedidoDTO.class);
-        ProdutoDTO produtoDTO = modelMapper.map(item.getProduto(), ProdutoDTO.class);
-        itensPedidoDTO.setProduto(produtoDTO);
-        return itensPedidoDTO;
+    private PedidoDetalhadoDTO convertToDetailedDTO(Pedido pedido) {
+        PedidoDetalhadoDTO pedidoDTO = modelMapper.map(pedido, PedidoDetalhadoDTO.class);
+        pedidoDTO.setPedidoStatus(pedido.getStatus().getDescricao());
+        pedidoDTO.setPedidoTipoPagamento(pedido.getTipoPagamento().getDescricao());
+        return pedidoDTO;
     }
 
     private Pedido convertToEntity(PedidoDTO pedidoDTO) {
-        StatusPedido statusPedido = statusPedidoRepository.findByDescricao(pedidoDTO.getPedidoStatus());
-        TipoPagamento tipoPagamento = tipoPagamentoRepository.findByDescricao(pedidoDTO.getPedidoTipoPagamento());
+        StatusPedido statusPedido = statusPedidoService.findByDescricao(pedidoDTO.getPedidoStatus());
+        TipoPagamento tipoPagamento = tipoPagamentoService.findByDescricao(pedidoDTO.getPedidoTipoPagamento());
 
         if (statusPedido == null)
             throw new NotFoundException("Status do pedido não encontrado. Status: " + pedidoDTO.getPedidoStatus());
@@ -143,4 +196,33 @@ public class PedidoController {
 
         return pedido;
     }
+
+    private StatusPedidoDTO convertToDto(StatusPedido statusPedido) {
+        return modelMapper.map(statusPedido, StatusPedidoDTO.class);
+    }
+
+    private StatusPedido convertToEntity(StatusPedidoDTO statusPedidoDTO) throws ParseException {
+        StatusPedido statusPedido = statusPedidoService.findByDescricao(statusPedidoDTO.getDescricao());
+
+        if (statusPedido == null) {
+            return modelMapper.map(statusPedidoDTO, StatusPedido.class);
+        }
+
+        return statusPedido;
+
+    }
+
+    private TipoPagamentoDTO convertToDTO(TipoPagamento tipoPagamento) {
+        return modelMapper.map(tipoPagamento, TipoPagamentoDTO.class);
+    }
+
+    private TipoPagamento convertToEntity(TipoPagamentoDTO tipoPagamentoDTO) {
+        TipoPagamento tipoPagamento = tipoPagamentoService.findByDescricao(tipoPagamentoDTO.getDescricao());
+
+        if (tipoPagamento == null)
+            return modelMapper.map(tipoPagamentoDTO, TipoPagamento.class);
+
+        return tipoPagamento;
+    }
+
 }

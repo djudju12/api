@@ -40,5 +40,10 @@ public class StatusPedido {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
+
+    @Override
+    public String toString() {
+        return "StatusPedido [id=" + id + ", descricao=" + descricao + "]";
+    }
+
 }
