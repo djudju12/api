@@ -160,8 +160,8 @@ public class PedidoController {
 
     @PutMapping("/{pedidoId}")
     public PedidoDTO updatePedido(@RequestBody PedidoDTO pedidoDTO, @PathVariable int pedidoId) {
+        pedidoDTO.setPedidoId(pedidoId);
         Pedido pedido = convertToEntity(pedidoDTO);
-        pedido.setId(pedidoId);
         Pedido pedidoEditado = pedidoService.update(pedido);
         return convertToDTO(pedidoEditado);
     }

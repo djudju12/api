@@ -97,5 +97,12 @@ public class Pedido {
     public void setDataPedido(LocalDateTime dataPedido) {
         this.dataPedido = dataPedido;
     }
+
+    @Override
+    public String toString() {
+        return "Pedido [id=" + id + ", tipoPagamento=" + tipoPagamento + ", status=" + status + ", dataPedido="
+                + dataPedido + ", itens=" + itens + "]";
+    }
+
     
 }

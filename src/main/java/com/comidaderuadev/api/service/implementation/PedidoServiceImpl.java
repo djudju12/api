@@ -1,6 +1,7 @@
 package com.comidaderuadev.api.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,12 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Pedido update(Pedido pedido) {
-        if (pedidoRepository.existsById(pedido.getId()))
+        Optional<Pedido> p = pedidoRepository.findById(pedido.getId());
+
+        if (p.isPresent()) {
+            pedido.setDataPedido(p.get().getDataPedido());
             return pedidoRepository.save(pedido);
+        }
 
         throw new NotFoundException("Pedido não encontrado. Pedido: " + pedido);
     }
