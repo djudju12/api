@@ -1,7 +1,6 @@
 package com.comidaderuadev.api.entity.pedido.DTO;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class PedidoDTO {
 
