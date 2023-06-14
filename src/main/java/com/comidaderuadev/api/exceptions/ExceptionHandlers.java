@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.exceptions.produto;
+package com.comidaderuadev.api.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ public class ExceptionHandlers {
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return new ResponseEntity<ExceptionResponse>(error, HttpStatus.NOT_FOUND);
-    
     }
 
     @ExceptionHandler

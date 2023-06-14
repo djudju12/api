@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.exceptions.produto;
+package com.comidaderuadev.api.exceptions;
 
 public class NotFoundException extends RuntimeException {
 

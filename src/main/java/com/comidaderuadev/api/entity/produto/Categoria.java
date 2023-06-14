@@ -12,11 +12,11 @@ import jakarta.persistence.Table;
 public class Categoria {
     
     @Id
-    @Column(name = "categoria_id")
+    @Column(name = "categoria_id", unique = true, nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "categoria_descricao", length = 200)
+    @Column(name = "categoria_descricao", length = 200, unique = true, nullable = false)
     private String descricao;
 
     Categoria() {}

@@ -18,14 +18,15 @@ public class ItensPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pedido_itens_id")
+    @Column(name = "pedido_itens_id", nullable = false, updatable = false, unique = true)
     private int vendaId;
 
     @ManyToOne
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
-    ItensPedido() {}
+    ItensPedido() {
+    }
 
     public ItensPedido(Produto produto) {
         this.produto = produto;
@@ -47,5 +48,5 @@ public class ItensPedido {
     public void setVendaId(int vendaId) {
         this.vendaId = vendaId;
     }
-    
+
 }

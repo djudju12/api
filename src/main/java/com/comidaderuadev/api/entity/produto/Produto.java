@@ -16,13 +16,13 @@ public class Produto {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "produto_id")
+    @Column(name = "produto_id", unique = true, nullable = false)
     private int id;
 
-    @Column(name = "produto_descricao", length = 200)
+    @Column(name = "produto_descricao", length = 200, nullable = false)
     private String produtoDescricao;
 
-    @Column(name = "produto_valor")
+    @Column(name = "produto_valor", nullable = false)
     private double produtoValor;
 
     @ManyToOne

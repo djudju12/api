@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.comidaderuadev.api.entity.produto.Categoria;
-import com.comidaderuadev.api.exceptions.produto.NotFoundException;
+import com.comidaderuadev.api.exceptions.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
 import com.comidaderuadev.api.service.CategoriaService;
 
