@@ -69,14 +69,6 @@ public class ProdutoController {
         return convertToDto(ProdutoCriado);
     }
 
-    @PostMapping("/categorias")
-    @ResponseStatus(HttpStatus.CREATED)
-    public CategoriaDTO addCategoria(@RequestBody CategoriaDTO categoriaDTO) throws ParseException {
-        Categoria categoria = convertToEntity(categoriaDTO);
-        Categoria categoriaCriada = categoriaService.add(categoria);
-        return convertToDto(categoriaCriada);
-    }
-
     @PutMapping("/{produtoId}")
     public ProdutoDTO updateProduto(@RequestBody ProdutoDTO produtoDTO, @PathVariable int produtoId) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
@@ -89,12 +81,6 @@ public class ProdutoController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteProduto(@PathVariable int produtoId) {
         produtoService.delete(produtoId);
-    }
-
-    @DeleteMapping("/categorias/{descricao}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteCategoria(@PathVariable String descricao) {
-        categoriaService.delete(descricao);
     }
 
     private ProdutoDTO convertToDto(Produto produto) {
@@ -119,11 +105,5 @@ public class ProdutoController {
 
     private CategoriaDTO convertToDto(Categoria categoria) {
         return modelMapper.map(categoria, CategoriaDTO.class);
-    }
-
-    private Categoria convertToEntity(CategoriaDTO categoriaDTO) throws ParseException {
-        
-        return modelMapper.map(categoriaDTO, Categoria.class);
-
     }
 }

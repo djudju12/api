@@ -20,12 +20,7 @@ public class ItensPedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pedido_itens_id")
-    private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "pedido_id")
-    @JsonIgnore
-    private Pedido pedido;
+    private int vendaId;
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
@@ -33,27 +28,10 @@ public class ItensPedido {
 
     ItensPedido() {}
 
-    public ItensPedido(Pedido pedido, Produto produto) {
-        this.pedido = pedido;
+    public ItensPedido(Produto produto) {
         this.produto = produto;
-        pedido.addItem(this);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
-    }
 
     public Produto getProduto() {
         return produto;
@@ -61,6 +39,14 @@ public class ItensPedido {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public int getVendaId() {
+        return vendaId;
+    }
+
+    public void setVendaId(int vendaId) {
+        this.vendaId = vendaId;
     }
     
 }
