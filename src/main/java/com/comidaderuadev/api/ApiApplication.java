@@ -28,10 +28,10 @@ public class ApiApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("*") // Permitir todas as origens
-						.allowedMethods("GET", "POST", "PUT", "DELETE") // Permitir métodos específicos
-						.allowedHeaders("*") // Permitir todos os cabeçalhos
-						.allowCredentials(true); // Permitir envio de cookies
+						.allowedOriginPatterns("*") // or specify your allowed origin patterns explicitly
+						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowedHeaders("*")
+						.allowCredentials(true);
 			}
 		};
 	}
