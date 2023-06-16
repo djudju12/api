@@ -35,18 +35,17 @@ public class ItensPedidoServiceImpl implements ItensPedidoService {
     @Override
     public ItensPedido addProduto(Produto produto) {
         ItensPedido itensPedido = new ItensPedido(produto);
-        ItensPedido itemCriado = itensPedidoRepository.save(itensPedido);
-        return itemCriado;
+        return itensPedidoRepository.save(itensPedido);
     }
 
     @Override
     public List<ItensPedido> addProdutos(Produto produto, int quantidadeProduto) {
         List<ItensPedido> listaItens = new ArrayList<>();
         for (int i = 0; i < quantidadeProduto; i++) {
-            ItensPedido itemCriado = addProduto(produto);
+            ItensPedido itemCriado = new ItensPedido(produto);
             listaItens.add(itemCriado);
         }
 
-        return listaItens;
+        return itensPedidoRepository.saveAll(listaItens);
     }
 }

@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "categoria")
 public class Categoria {
@@ -44,6 +46,18 @@ public class Categoria {
     @Override
     public String toString() {
         return descricao;
-    } 
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Categoria categoria = (Categoria) o;
+        return id == categoria.id && Objects.equals(descricao, categoria.descricao);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, descricao);
+    }
 }

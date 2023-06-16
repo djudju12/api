@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "produto")
 public class Produto {
@@ -29,7 +31,7 @@ public class Produto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    Produto() {}
+    public Produto() {}
 
     public Produto(String produtoDescricao, double produtoValor, Categoria categoria) {
         this.produtoDescricao = produtoDescricao;
@@ -75,5 +77,18 @@ public class Produto {
                 ", produtoDescricao=" + produtoDescricao + 
                 ", produtoValor=" + produtoValor+ 
                 ", categoria=" + categoria + "]";
-    }    
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Produto produto = (Produto) o;
+        return id == produto.id && Double.compare(produto.produtoValor, produtoValor) == 0 && Objects.equals(produtoDescricao, produto.produtoDescricao) && Objects.equals(categoria, produto.categoria);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, produtoDescricao, produtoValor, categoria);
+    }
 }

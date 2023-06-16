@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "pedido_itens")
 public class ItensPedido {
@@ -25,7 +27,7 @@ public class ItensPedido {
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
-    ItensPedido() {
+    public ItensPedido() {
     }
 
     public ItensPedido(Produto produto) {
@@ -47,6 +49,14 @@ public class ItensPedido {
 
     public void setVendaId(int vendaId) {
         this.vendaId = vendaId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItensPedido that = (ItensPedido) o;
+        return vendaId == that.vendaId && Objects.equals(produto, that.produto);
     }
 
 }

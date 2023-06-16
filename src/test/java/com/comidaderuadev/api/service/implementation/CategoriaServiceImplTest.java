@@ -41,14 +41,15 @@ class CategoriaServiceImplTest {
         //given
         List<Categoria> categoriaList = new ArrayList<>();
         given(repository.findAll()).willReturn(categoriaList);
+        categoriaList.add(mock(Categoria.class));
+        categoriaList.add(mock(Categoria.class));
 
         //when
-        categoriaList.add(mock(Categoria.class));
-        categoriaList.add(mock(Categoria.class));
         List<Categoria> returnedCategoriaList = service.findAll();
 
         //then
         then(repository).should().findAll();
+        assertThat(returnedCategoriaList).isNotNull();
         assertThat(returnedCategoriaList.size()).isEqualTo(2);
     }
 
