@@ -6,6 +6,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,13 +37,15 @@ public class ProdutoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping
-    public List<ProdutoDTO> findAll() {
-        return produtoService
+    @GetMapping(produces = {"application/json"})
+    public ResponseEntity<List<ProdutoDTO>> findAll() {
+        List<ProdutoDTO> listProduto = produtoService
                 .findAll()
                 .stream()
-                .map(produto -> convertToDto(produto))
+                .map(this::convertToDto)
                 .toList();
+
+        return new ResponseEntity<>(listProduto, HttpStatus.OK);
     }
 
     @GetMapping("/categorias")
@@ -50,7 +53,7 @@ public class ProdutoController {
         return categoriaService
                 .findAll()
                 .stream()
-                .map(categoria -> convertToDto(categoria))
+                .map(this::convertToDto)
                 .toList();
     }
 

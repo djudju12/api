@@ -1,8 +1,17 @@
 package com.comidaderuadev.api.entity.produto.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 public class ProdutoDTO {
+
+    @Builder
+    public ProdutoDTO(int produtoId, String produtoDescricao, double produtoValor, String categoria) {
+        this.produtoId = produtoId;
+        this.produtoDescricao = produtoDescricao;
+        this.produtoValor = produtoValor;
+        this.categoria = categoria;
+    }
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Id do produto", example = "26")
     private int produtoId;
