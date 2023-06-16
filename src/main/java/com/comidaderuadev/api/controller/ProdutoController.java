@@ -37,15 +37,15 @@ public class ProdutoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping(produces = {"application/json"})
-    public ResponseEntity<List<ProdutoDTO>> findAll() {
-        List<ProdutoDTO> listProduto = produtoService
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProdutoDTO> findAll() {
+        return produtoService
                 .findAll()
                 .stream()
                 .map(this::convertToDto)
                 .toList();
 
-        return new ResponseEntity<>(listProduto, HttpStatus.OK);
     }
 
     @GetMapping("/categorias")
