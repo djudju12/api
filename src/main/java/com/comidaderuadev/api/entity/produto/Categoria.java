@@ -21,7 +21,7 @@ public class Categoria {
     @Column(name = "categoria_descricao", length = 200, unique = true, nullable = false)
     private String descricao;
 
-    Categoria() {}
+    public Categoria() {}
 
     public Categoria(String descricao) {
         this.descricao = descricao;

@@ -1,6 +1,7 @@
 package com.comidaderuadev.api.service.implementation;
 
 import com.comidaderuadev.api.entity.produto.Categoria;
+import com.comidaderuadev.api.entity.produto.Produto;
 import com.comidaderuadev.api.exceptions.NotFoundException;
 import com.comidaderuadev.api.repository.CategoriaRepository;
 import org.checkerframework.checker.units.qual.C;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.lang.model.util.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CategoriaServiceImplTest {
@@ -35,6 +38,9 @@ class CategoriaServiceImplTest {
     CategoriaServiceImpl service;
 
     final String DESC = "BRASILEIRA";
+
+    @Captor
+    private ArgumentCaptor<Categoria> captor;
 
     @Test
     void findAll() {
@@ -70,15 +76,20 @@ class CategoriaServiceImplTest {
     @Test
     void add() {
         //given
-        Categoria categoria = new Categoria(DESC);
-        given(repository.save(categoria)).willReturn(categoria);
+        Categoria expectedCategoria = new Categoria();
+        expectedCategoria.setId(1);
+        given(repository.save(any(Categoria.class))).willReturn(expectedCategoria);
 
         //then
-        Categoria addedCategoria = service.add(categoria);
+        Categoria savedCategoria = new Categoria();
+        savedCategoria.setId(5);
+        Categoria returnedCategoria = service.add(savedCategoria);
 
         //when
-        assertThat(addedCategoria).isNotNull();
-        assertThat(addedCategoria.getId()).isEqualTo(0);
+        verify(repository).save(captor.capture());
+        Categoria capturedCategoria = captor.getValue();
+        assertThat(capturedCategoria.getId()).isEqualTo(0);
+        assertThat(returnedCategoria.getId()).isEqualTo(1);
     }
 
     @Test
