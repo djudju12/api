@@ -49,6 +49,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/categorias")
+    @ResponseStatus(HttpStatus.OK)
     public List<CategoriaDTO> findAllCategorias() {
         return categoriaService
                 .findAll()

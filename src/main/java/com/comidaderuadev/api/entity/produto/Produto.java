@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 
 import java.util.Objects;
 
@@ -34,6 +35,14 @@ public class Produto {
     public Produto() {}
 
     public Produto(String produtoDescricao, double produtoValor, Categoria categoria) {
+        this.produtoDescricao = produtoDescricao;
+        this.produtoValor = produtoValor;
+        this.categoria = categoria;
+    }
+
+    @Builder
+    public Produto(int id, String produtoDescricao, double produtoValor, Categoria categoria) {
+        this.id = id;
         this.produtoDescricao = produtoDescricao;
         this.produtoValor = produtoValor;
         this.categoria = categoria;
