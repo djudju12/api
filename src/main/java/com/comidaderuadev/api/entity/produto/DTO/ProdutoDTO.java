@@ -23,7 +23,7 @@ public class ProdutoDTO {
     private int produtoId;
 
     @Schema(description = "Identificador do produto", example = "Pão Árabe")
-    @Size(min = 1, message = "Descrição do produto não pode estar vazia")
+    @Size(min = 1, max = 200, message = "Descrição do produto deve possui de 1 até 200 caracteres.")
     private String produtoDescricao;
 
     @Schema(description = "Valor do produto", example = "12.00")

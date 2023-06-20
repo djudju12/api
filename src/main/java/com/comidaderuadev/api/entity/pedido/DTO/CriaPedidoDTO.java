@@ -9,7 +9,7 @@ public class CriaPedidoDTO {
 
     List<Integer> itens;
 
-    @Size(min = 1, message = "Tipo de pagamento não pode estar vazio.")
+    @Size(min = 1, max = 200, message = "tipoPagamento deve conter de 1 até 200 caracteres")
     String tipoPagamento;
 
     public List<Integer> getItens() {
