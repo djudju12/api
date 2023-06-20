@@ -3,6 +3,9 @@ package com.comidaderuadev.api.service.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comidaderuadev.api.entity.pedido.Pedido;
+import com.comidaderuadev.api.exceptions.NotFoundException;
+import com.comidaderuadev.api.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ import jakarta.transaction.Transactional;
 @Service
 public class ItensPedidoServiceImpl implements ItensPedidoService {
 
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Autowired
     private ItensPedidoRepository itensPedidoRepository;
@@ -31,20 +36,16 @@ public class ItensPedidoServiceImpl implements ItensPedidoService {
         itensPedidoRepository.deleteById(vendaId);
     }
 
+    @Override
     @Transactional
-    @Override
-    public ItensPedido addProduto(Produto produto) {
-        ItensPedido itensPedido = new ItensPedido(produto);
-        return itensPedidoRepository.save(itensPedido);
-    }
-
-    @Override
-    public List<ItensPedido> addProdutos(Produto produto, int quantidadeProduto) {
+    public List<ItensPedido> addProdutos(Pedido pedido, List<Integer> listOfIdsOfProdutos) {
         List<ItensPedido> listaItens = new ArrayList<>();
-        for (int i = 0; i < quantidadeProduto; i++) {
-            ItensPedido itemCriado = new ItensPedido(produto);
-            listaItens.add(itemCriado);
-        }
+
+        listOfIdsOfProdutos.stream()
+                .map((id) -> produtoRepository.findById(id)
+                        .orElseThrow(() ->
+                                new NotFoundException("Produto não encontrado. Id: " + id)))
+                .forEach((produto) -> listaItens.add(new ItensPedido(pedido, produto)));
 
         return itensPedidoRepository.saveAll(listaItens);
     }

@@ -5,6 +5,8 @@ import lombok.Builder;
 
 public class ProdutoDTO {
 
+    public ProdutoDTO() {}
+
     @Builder
     public ProdutoDTO(int produtoId, String produtoDescricao, double produtoValor, String categoria) {
         this.produtoId = produtoId;

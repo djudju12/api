@@ -3,14 +3,8 @@ package com.comidaderuadev.api.entity.pedido;
 
 import com.comidaderuadev.api.entity.produto.Produto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -27,13 +21,16 @@ public class ItensPedido {
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
-    public ItensPedido() {
-    }
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "pedido_id", nullable = false)
+    private Pedido pedido;
 
-    public ItensPedido(Produto produto) {
+    ItensPedido() {}
+
+    public ItensPedido(Pedido pedido, Produto produto) {
         this.produto = produto;
+        this.pedido = pedido;
     }
-
 
     public Produto getProduto() {
         return produto;
@@ -51,12 +48,33 @@ public class ItensPedido {
         this.vendaId = vendaId;
     }
 
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItensPedido that = (ItensPedido) o;
-        return vendaId == that.vendaId && Objects.equals(produto, that.produto);
+        return vendaId == that.vendaId && Objects.equals(produto, that.produto) && Objects.equals(pedido, that.pedido);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(vendaId, produto, pedido);
+    }
+
+    @Override
+    public String toString() {
+        return "ItensPedido{" +
+                "vendaId=" + vendaId +
+                ", produto=" + produto +
+                ", pedido=" + pedido +
+                '}';
+    }
 }
