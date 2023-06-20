@@ -10,6 +10,7 @@ import com.comidaderuadev.api.service.ItensPedidoService;
 import com.comidaderuadev.api.service.PedidoService;
 import com.comidaderuadev.api.service.ProdutoService;
 import com.comidaderuadev.api.service.TipoPagamentoService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,9 +63,15 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPedido(@RequestBody CriaPedidoDTO criaPedidoDTO) {
+    public void createPedido(@Valid @RequestBody CriaPedidoDTO criaPedidoDTO) {
         TipoPagamento tipoPagamento = tipoPagamentoService.findByDescricao(criaPedidoDTO.getTipoPagamento());
-        itensPedidoService.addProdutos(new Pedido(tipoPagamento), criaPedidoDTO.getListOfIds());
+        itensPedidoService.addProdutos(new Pedido(tipoPagamento), criaPedidoDTO.getItens());
+    }
+
+    @DeleteMapping("/{pedidoId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePedido(@PathVariable int pedidoId) {
+        pedidoService.delete(pedidoId);
     }
 
     private PedidoDTO convertToDTO(Pedido pedido) {

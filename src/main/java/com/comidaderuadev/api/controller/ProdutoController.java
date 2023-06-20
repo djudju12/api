@@ -3,6 +3,8 @@ package com.comidaderuadev.api.controller;
 import java.text.ParseException;
 import java.util.List;
 
+import com.comidaderuadev.api.exceptions.NotFoundException;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,14 +69,14 @@ public class ProdutoController {
     // Eu nao sei o que fazer com esse ParseExecption então só passei adiante
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProdutoDTO addProduto(@RequestBody ProdutoDTO produtoDTO) throws ParseException {
+    public ProdutoDTO addProduto(@Valid @RequestBody ProdutoDTO produtoDTO) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
         Produto ProdutoCriado = produtoService.add(produto);
         return convertToDto(ProdutoCriado);
     }
 
     @PutMapping("/{produtoId}")
-    public ProdutoDTO updateProduto(@RequestBody ProdutoDTO produtoDTO, @PathVariable int produtoId) throws ParseException {
+    public ProdutoDTO updateProduto(@Valid @RequestBody ProdutoDTO produtoDTO, @PathVariable int produtoId) throws ParseException {
         Produto produto = convertToEntity(produtoDTO);
         produto.setId(produtoId);
         Produto produtoAtualizado = produtoService.update(produto);
@@ -90,13 +92,7 @@ public class ProdutoController {
     private ProdutoDTO convertToDto(Produto produto) {
         ProdutoDTO produtoDTO = modelMapper.map(produto, ProdutoDTO.class);
         Categoria categoria = produto.getCategoria();
-
-        if (categoria == null) {
-            produtoDTO.setCategoria("SEM CATEGORIA");
-        } else {
-            produtoDTO.setCategoria(produto.getCategoria().getDescricao());
-        }
-            
+        produtoDTO.setCategoria(categoria.getDescricao());
         return produtoDTO;
 
     }

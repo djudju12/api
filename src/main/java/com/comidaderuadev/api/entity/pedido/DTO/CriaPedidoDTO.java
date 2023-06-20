@@ -1,21 +1,26 @@
 package com.comidaderuadev.api.entity.pedido.DTO;
 
+import jakarta.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CriaPedidoDTO {
-    List<Integer> listOfIds;
+
+    List<Integer> itens;
+
+    @Size(min = 1, message = "Tipo de pagamento não pode estar vazio.")
     String tipoPagamento;
 
-    public List<Integer> getListOfIds() {
-        return listOfIds;
+    public List<Integer> getItens() {
+        return itens;
     }
 
-    public void setListOfIds(List<Integer> listOfIds) {
-        if (listOfIds == null)
+    public void setItens(List<Integer> itens) {
+        if (itens == null)
             new ArrayList<>();
 
-        this.listOfIds = listOfIds;
+        this.itens = itens;
     }
 
     public String getTipoPagamento() {
