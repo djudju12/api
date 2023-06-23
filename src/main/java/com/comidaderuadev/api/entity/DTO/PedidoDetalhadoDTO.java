@@ -1,6 +1,7 @@
 package com.comidaderuadev.api.entity.DTO;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class PedidoDetalhadoDTO extends PedidoDTO {
 
     private List<ItemPedidoDTO> itens;
@@ -16,12 +18,6 @@ public class PedidoDetalhadoDTO extends PedidoDTO {
     public PedidoDetalhadoDTO(List<ItemPedidoDTO> itens) {
         this.itens = itens;
     }
-
-    public PedidoDetalhadoDTO(int pedidoId, String pedidoTipoPagamento, LocalDateTime pedidoData, List<ItemPedidoDTO> itens) {
-        super(pedidoId, pedidoTipoPagamento, pedidoData);
-        this.itens = itens;
-    }
-
 
     public void addItens(ItemPedidoDTO item) {
         if (this.itens == null)

@@ -7,6 +7,7 @@ import com.comidaderuadev.api.entity.produto.Categoria;
 import com.comidaderuadev.api.entity.produto.Produto;
 import com.comidaderuadev.api.service.CategoriaService;
 import com.comidaderuadev.api.service.ProdutoService;
+import com.comidaderuadev.api.utils.JsonWriter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -72,8 +73,6 @@ class ProdutoControllerTest {
         @Captor
         ArgumentCaptor<String> stringArgumentCaptor;
 
-        ObjectWriter ow;
-
         @BeforeEach
         void setUp() {
 
@@ -97,6 +96,7 @@ class ProdutoControllerTest {
             // Converte de entidade para DTO
             given(mapStructMapperProdutos.produtoToProdutoDTO(produtoArgumentCaptor.capture()))
                     .willAnswer( invocationOnMock -> {
+
                         Produto capturedProduto = invocationOnMock.getArgument(0);
                         return ProdutoDTO.builder()
                                 .produtoId(capturedProduto.getId())
@@ -126,9 +126,6 @@ class ProdutoControllerTest {
                         return new Categoria(descricao);
                     });
 
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-            ow = mapper.writer().withDefaultPrettyPrinter();
         }
 
         @AfterEach
@@ -186,7 +183,7 @@ class ProdutoControllerTest {
         @Test
         void addProduto() throws Exception {
             //given
-            String requestJson = ow.writeValueAsString(
+            String requestJson = JsonWriter.toJsonString(
                     mapStructMapperProdutos.produtoToProdutoDTO(produto)
             );
             given(produtoService.add(any(Produto.class))).willReturn(produto);
@@ -202,6 +199,7 @@ class ProdutoControllerTest {
                     .andExpect(jsonPath("$.produtoValor", is(produto.getProdutoValor())))
                     .andExpect(jsonPath("$.categoria", is(produto.getCategoria().getDescricao())));
 
+            //then
             then(produtoService).should().add(any(Produto.class));
             then(produtoService).shouldHaveNoMoreInteractions();
         }
@@ -226,7 +224,7 @@ class ProdutoControllerTest {
                     .categoria(new Categoria("BRASILEIRA"))
                     .build();
 
-            String requestJson = ow.writeValueAsString(
+            String requestJson = JsonWriter.toJsonString(
                 mapStructMapperProdutos.produtoToProdutoDTO(expectedProduto)
             );
 

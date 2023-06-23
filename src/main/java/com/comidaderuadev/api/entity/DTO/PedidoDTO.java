@@ -4,24 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@SuperBuilder
 public class PedidoDTO {
     private int id;
     private String tipoPagamento;
     private LocalDateTime pedidoData;
 
     public PedidoDTO() {}
-
-    @Builder
-    public PedidoDTO(int id, String tipoPagamento, LocalDateTime pedidoData) {
-        this.id = id;
-        this.tipoPagamento = tipoPagamento;
-        this.pedidoData = pedidoData;
-    }
 
     @Override
     public String toString() {

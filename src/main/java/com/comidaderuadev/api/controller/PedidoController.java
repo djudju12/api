@@ -29,7 +29,6 @@ public class PedidoController {
     public PedidoController(PedidoService pedidoService,
                             ItensPedidoService itensPedidoService,
                             TipoPagamentoService tipoPagamentoService,
-                            ProdutoService produtoService,
                             MapStructMapperPedidos map) {
         this.pedidoService = pedidoService;
         this.itensPedidoService = itensPedidoService;
