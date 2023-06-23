@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -19,8 +23,11 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pedido")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Pedido {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pedido_id")
@@ -37,47 +44,21 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<ItensPedido> itens;
 
-    Pedido() {}
+    @Builder
+    public Pedido(int id, TipoPagamento tipoPagamento, LocalDateTime pedidoData, List<ItensPedido> itens) {
+        this.id = id;
+        this.tipoPagamento = tipoPagamento;
+        this.pedidoData = pedidoData;
+        this.itens = itens;
+    }
 
     public Pedido(TipoPagamento tipoPagamento) {
         this.tipoPagamento = tipoPagamento;
         this.itens = new ArrayList<>();
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public TipoPagamento getTipoPagamento() {
-        return tipoPagamento;
-    }
-
-    public void setTipoPagamento(TipoPagamento tipoPagamento) {
-        this.tipoPagamento = tipoPagamento;
-    }
-
-
-    public List<ItensPedido> getItens() {
-        return itens;
-    }
-
-    public void setItens(List<ItensPedido> itens) {
-        this.itens = itens;
-    }
-
     public void addProduto(ItensPedido item) {
         itens.add(item);
     }
 
-    public LocalDateTime getPedidoData() {
-        return pedidoData;
-    }
-
-    public void setPedidoData(LocalDateTime pedidoData) {
-        this.pedidoData = pedidoData;
-    }
 }

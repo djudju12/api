@@ -1,9 +1,10 @@
 package com.comidaderuadev.api.controller;
 
-import com.comidaderuadev.api.entity.pedido.DTO.CriaPedidoDTO;
-import com.comidaderuadev.api.entity.pedido.DTO.PedidoDTO;
-import com.comidaderuadev.api.entity.pedido.DTO.PedidoDetalhadoDTO;
-import com.comidaderuadev.api.entity.pedido.DTO.TipoPagamentoDTO;
+import com.comidaderuadev.api.entity.mapper.MapStructMapperPedidos;
+import com.comidaderuadev.api.entity.DTO.CriaPedidoDTO;
+import com.comidaderuadev.api.entity.DTO.PedidoDTO;
+import com.comidaderuadev.api.entity.DTO.PedidoDetalhadoDTO;
+import com.comidaderuadev.api.entity.DTO.TipoPagamentoDTO;
 import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.pedido.TipoPagamento;
 import com.comidaderuadev.api.service.ItensPedidoService;
@@ -11,8 +12,6 @@ import com.comidaderuadev.api.service.PedidoService;
 import com.comidaderuadev.api.service.ProdutoService;
 import com.comidaderuadev.api.service.TipoPagamentoService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,27 +21,28 @@ import java.util.List;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    @Autowired
     private PedidoService pedidoService;
-
-    @Autowired
     private ItensPedidoService itensPedidoService;
-
-    @Autowired
     private TipoPagamentoService tipoPagamentoService;
+    private MapStructMapperPedidos map;
 
-    @Autowired
-    private ProdutoService produtoService;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    public PedidoController(PedidoService pedidoService,
+                            ItensPedidoService itensPedidoService,
+                            TipoPagamentoService tipoPagamentoService,
+                            ProdutoService produtoService,
+                            MapStructMapperPedidos map) {
+        this.pedidoService = pedidoService;
+        this.itensPedidoService = itensPedidoService;
+        this.tipoPagamentoService = tipoPagamentoService;
+        this.map = map;
+    }
 
     @GetMapping
     public List<PedidoDTO> findAll() {
         return pedidoService
                 .findAll()
                 .stream()
-                .map(this::convertToDTO)
+                .map(p -> map.pedidoToPedidoDTO(p))
                 .toList();
     }
     @GetMapping("/detalhes")
@@ -50,7 +50,8 @@ public class PedidoController {
         return pedidoService
                 .findAll()
                 .stream()
-                .map(this::convertToDetailedDTO)
+                .map(p -> map.pedidoToPedidoDetalhadoDTO(p,
+                        new PedidoDetalhadoDTO()))
                 .toList();
     }
 
@@ -59,14 +60,14 @@ public class PedidoController {
         return tipoPagamentoService
                 .findAll()
                 .stream()
-                .map(this::convertToDTO)
+                .map(tp -> map.tipoPagamentoToTipoPagamentoDTO(tp))
                 .toList();
     }
 
     @GetMapping("/{pedidoId}")
     public PedidoDetalhadoDTO findByIdWithDetails(@PathVariable int pedidoId) {
         Pedido pedido = pedidoService.findById(pedidoId);
-        return convertToDetailedDTO(pedido);
+        return map.pedidoToPedidoDetalhadoDTO(pedido, new PedidoDetalhadoDTO());
     }
 
     @PostMapping
@@ -80,30 +81,6 @@ public class PedidoController {
     @ResponseStatus(HttpStatus.OK)
     public void deletePedido(@PathVariable int pedidoId) {
         pedidoService.delete(pedidoId);
-    }
-
-    private PedidoDTO convertToDTO(Pedido pedido) {
-        PedidoDTO pedidoDTO = modelMapper.map(pedido, PedidoDTO.class);
-        pedidoDTO.setTipoPagamento(pedido.getTipoPagamento().getDescricao());
-        return pedidoDTO;
-    }
-
-    private PedidoDetalhadoDTO convertToDetailedDTO(Pedido pedido) {
-        PedidoDetalhadoDTO pedidoDTO = modelMapper.map(pedido, PedidoDetalhadoDTO.class);
-        pedidoDTO.setTipoPagamento(pedido.getTipoPagamento().getDescricao());
-        return pedidoDTO;
-    }
-
-    private Pedido convertToEntity(PedidoDTO pedidoDTO) {
-        return modelMapper.map(pedidoDTO, Pedido.class);
-    }
-
-    private TipoPagamentoDTO convertToDTO(TipoPagamento tipoPagamento) {
-        return modelMapper.map(tipoPagamento, TipoPagamentoDTO.class);
-    }
-
-    private TipoPagamento convertToEntity(TipoPagamentoDTO tipoPagamentoDTO) {
-        return modelMapper.map(tipoPagamentoDTO, TipoPagamento.class);
     }
 
 }

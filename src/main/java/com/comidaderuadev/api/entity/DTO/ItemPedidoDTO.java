@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.entity.pedido.DTO;
+package com.comidaderuadev.api.entity.DTO;
 
 import com.comidaderuadev.api.entity.DTO.ProdutoDTO;
 

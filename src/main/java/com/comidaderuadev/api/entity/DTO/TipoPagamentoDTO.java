@@ -1,4 +1,4 @@
-package com.comidaderuadev.api.entity.pedido.DTO;
+package com.comidaderuadev.api.entity.DTO;
 
 public class TipoPagamentoDTO {
     private String descricao;

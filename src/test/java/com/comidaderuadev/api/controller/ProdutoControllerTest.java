@@ -1,27 +1,26 @@
 package com.comidaderuadev.api.controller;
 
 import com.comidaderuadev.api.entity.DTO.CategoriaDTO;
-import com.comidaderuadev.api.entity.mapper.MapStructMapperProdutos;
-import com.comidaderuadev.api.entity.mapper.MapStructMapperProdutosImpl;
-import com.comidaderuadev.api.entity.produto.Categoria;
 import com.comidaderuadev.api.entity.DTO.ProdutoDTO;
+import com.comidaderuadev.api.entity.mapper.MapStructMapperProdutos;
+import com.comidaderuadev.api.entity.produto.Categoria;
 import com.comidaderuadev.api.entity.produto.Produto;
 import com.comidaderuadev.api.service.CategoriaService;
 import com.comidaderuadev.api.service.ProdutoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.junit.jupiter.api.*;
-import org.mapstruct.factory.Mappers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -30,10 +29,12 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,9 +56,6 @@ class ProdutoControllerTest {
 
     @Nested
     public class ProdutoTests {
-        ProdutoDTO validProdutoDTO;
-
-        ProdutoDTO anotherValidProdutoDTO;
 
         Produto produto;
 
