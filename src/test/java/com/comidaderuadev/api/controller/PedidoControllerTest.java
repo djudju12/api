@@ -8,7 +8,6 @@ import com.comidaderuadev.api.service.ItensPedidoService;
 import com.comidaderuadev.api.service.PedidoService;
 import com.comidaderuadev.api.service.TipoPagamentoService;
 import com.comidaderuadev.api.utils.JsonWriter;
-import lombok.SneakyThrows;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,10 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import static org.assertj.core.api.AssertionsForClassTypes.setRemoveAssertJRelatedElementsFromStackTrace;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,9 +30,10 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -187,12 +184,16 @@ class PedidoControllerTest {
         void createPedidoWithInvalidDTO() throws Exception {
             //given
             String invalidContent = "{\"invalidJson\": true}";
+
             //when
             mockMvc.perform(post("/pedidos")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(invalidContent))
                     .andExpect(status().is4xxClientError())
-                    .andDo(print());
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.status").exists())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message").exists())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.timeStamp").exists());
+
 
         }
 
