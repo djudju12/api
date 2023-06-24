@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.comidaderuadev.api.entity.pedido.ItensPedido;
-import com.comidaderuadev.api.entity.produto.Produto;
 import com.comidaderuadev.api.repository.ItensPedidoRepository;
 import com.comidaderuadev.api.service.ItensPedidoService;
 

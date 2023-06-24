@@ -1,8 +1,6 @@
 package com.comidaderuadev.api.controller;
 
-import com.comidaderuadev.api.entity.DTO.CriaPedidoDTO;
-import com.comidaderuadev.api.entity.DTO.ItemPedidoDTO;
-import com.comidaderuadev.api.entity.DTO.PedidoDetalhadoDTO;
+import com.comidaderuadev.api.entity.DTO.*;
 import com.comidaderuadev.api.entity.mapper.MapStructMapperPedidos;
 import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.pedido.TipoPagamento;
@@ -10,6 +8,7 @@ import com.comidaderuadev.api.service.ItensPedidoService;
 import com.comidaderuadev.api.service.PedidoService;
 import com.comidaderuadev.api.service.TipoPagamentoService;
 import com.comidaderuadev.api.utils.JsonWriter;
+import lombok.SneakyThrows;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +21,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.MvcResult;
+
+import static org.assertj.core.api.AssertionsForClassTypes.setRemoveAssertJRelatedElementsFromStackTrace;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -33,8 +37,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,38 +59,37 @@ class PedidoControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @AfterEach
+    void tearDown() {
+        reset(pedidoService);
+        reset(itensPedidoService);
+        reset(tipoPagamentoService);
+    }
+
     @Nested
-    public class PedidoTests{
+    public class PedidoTests {
 
         List<Pedido> pedidos;
 
         Pedido pedido;
-
-        Pedido anotherPedido;
-
-        @Captor
-        ArgumentCaptor<Pedido> pedidoArgumentCaptor;
 
         @Captor
         ArgumentCaptor<Integer> integerArgumentCaptor;
 
         @BeforeEach
         void setUp() {
-            given(pedidoService.findAll()).willReturn(pedidos);
-
+            pedidos = new ArrayList<>();
             pedido = Pedido.builder()
                     .id(1)
                     .tipoPagamento(new TipoPagamento("PIX"))
                     .pedidoData(LocalDateTime.now())
                     .build();
 
-            anotherPedido = Pedido.builder()
-                    .id(2)
-                    .tipoPagamento(new TipoPagamento("DINHEIRO"))
-                    .pedidoData(LocalDateTime.now())
-                    .build();
+            pedidos.add(pedido);
 
-            given(map.pedidoToPedidoDetalhadoDTO(pedidoArgumentCaptor.capture(), any(PedidoDetalhadoDTO.class)))
+            given(pedidoService.findAll()).willReturn(pedidos);
+
+            given(map.pedidoToPedidoDetalhadoDTO(any(Pedido.class), any(PedidoDetalhadoDTO.class)))
                     .willAnswer(invocationOnMock -> {
 
                         Pedido capturedPedido = invocationOnMock.getArgument(0);
@@ -98,11 +100,48 @@ class PedidoControllerTest {
                                 .itens(Lists.newArrayList(new ItemPedidoDTO()))
                                 .build();
                     });
+
+            given(map.pedidoToPedidoDTO(any(Pedido.class)))
+                    .willAnswer(invocationOnMock -> {
+
+                        Pedido capturedPedido = invocationOnMock.getArgument(0);
+                        return PedidoDTO.builder()
+                                .id(capturedPedido.getId())
+                                .tipoPagamento(capturedPedido.getTipoPagamento().getDescricao())
+                                .pedidoData(capturedPedido.getPedidoData())
+                                .build();
+                    });
         }
 
-        @AfterEach
-        void tearDown() {
-            reset(pedidoService);
+        @Test
+        void findAll() throws Exception {
+            //when
+            mockMvc.perform(get("/pedidos")
+                        .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", hasSize(pedidos.size())))
+                    .andExpect(jsonPath("$.[0].id", is(pedido.getId())))
+                    .andExpect(jsonPath("$.[0].tipoPagamento", is(pedido.getTipoPagamento().getDescricao())));
+
+            //then
+            then(pedidoService).should().findAll();
+            then(pedidoService).shouldHaveNoMoreInteractions();
+        }
+
+        @Test
+        void findAllWithDetail() throws Exception {
+            //when
+            mockMvc.perform(get("/pedidos/detalhes")
+                        .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", hasSize(pedidos.size())))
+                    .andExpect(jsonPath("$.[0].id", is(pedido.getId())))
+                    .andExpect(jsonPath("$.[0].tipoPagamento", is(pedido.getTipoPagamento().getDescricao())))
+                    .andExpect(jsonPath("$.[0].itens", hasSize(1)));
+
+            //then
+            then(pedidoService).should().findAll();
+            then(pedidoService).shouldHaveNoMoreInteractions();
         }
 
         @Test
@@ -111,7 +150,7 @@ class PedidoControllerTest {
             given(pedidoService.findById(anyInt())).willReturn(pedido);
 
             //when
-            mockMvc.perform(MockMvcRequestBuilders.get("/pedidos/" + pedido.getId())
+            mockMvc.perform(get("/pedidos/" + pedido.getId())
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.itens", hasSize(1)))
@@ -133,7 +172,7 @@ class PedidoControllerTest {
             given(tipoPagamentoService.findByDescricao(anyString())).willReturn(new TipoPagamento("PIX"));
 
             //when
-            mockMvc.perform(MockMvcRequestBuilders.post("/pedidos")
+            mockMvc.perform(post("/pedidos")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestJson))
                     .andExpect(status().isCreated());
@@ -145,9 +184,22 @@ class PedidoControllerTest {
         }
 
         @Test
+        void createPedidoWithInvalidDTO() throws Exception {
+            //given
+            String invalidContent = "{\"invalidJson\": true}";
+            //when
+            mockMvc.perform(post("/pedidos")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(invalidContent))
+                    .andExpect(status().is4xxClientError())
+                    .andDo(print());
+
+        }
+
+        @Test
         void deletePedido() throws Exception {
             //when
-            mockMvc.perform(MockMvcRequestBuilders.delete("/pedidos/" + pedido.getId()))
+            mockMvc.perform(delete("/pedidos/" + pedido.getId()))
                     .andExpect(status().isOk());
 
             //then
@@ -156,4 +208,41 @@ class PedidoControllerTest {
         }
     }
 
+    @Nested
+    public class TipoPagamentoTests {
+
+        List<TipoPagamento> tipoPagamentos;
+
+        TipoPagamento tipoPagamento;
+
+        @BeforeEach
+        void setUp() {
+            tipoPagamentos = new ArrayList<>();
+            tipoPagamento = new TipoPagamento("PIX");
+            tipoPagamentos.add(tipoPagamento);
+
+            given(map.tipoPagamentoToTipoPagamentoDTO(any(TipoPagamento.class)))
+                    .willAnswer(invocationOnMock -> {
+                        TipoPagamento tipoPagamento = invocationOnMock.getArgument(0);
+                        return new TipoPagamentoDTO(tipoPagamento.getDescricao());
+                    });
+        }
+
+        @Test
+        void findAll() throws Exception {
+            //given
+            given(tipoPagamentoService.findAll()).willReturn(tipoPagamentos);
+
+            //when
+            mockMvc.perform(get("/pedidos/tiposPagamentos")
+                        .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", hasSize(1)))
+                    .andExpect(jsonPath("$.[0].descricao", is(tipoPagamento.getDescricao())));
+
+            //then
+            then(tipoPagamentoService).should().findAll();
+            then(tipoPagamentoService).shouldHaveNoMoreInteractions();
+        }
+    }
 }

@@ -49,6 +49,9 @@ public class Produto {
         this.categoria = categoria;
     }
 
+    public <T> Produto(T argument) {
+    }
+
     @Override
     public String toString() {
         return "Produto [id=" + id + 

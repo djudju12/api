@@ -16,11 +16,6 @@ import com.comidaderuadev.api.service.PedidoService;
 @Service
 public class PedidoServiceImpl implements PedidoService {
 
-    @Autowired
-    private ItensPedidoRepository itensPedidoRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
 
     @Autowired
     private PedidoRepository pedidoRepository;
@@ -34,12 +29,6 @@ public class PedidoServiceImpl implements PedidoService {
     public Pedido findById(int id) {
         return pedidoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Pedido nao encontrado. Id: " + id));
-    }
-
-    @Override
-    @Transactional
-    public void addAll(Pedido pedido, List<Integer> listOfIds) {
-        pedidoRepository.save(pedido);
     }
 
     @Override
