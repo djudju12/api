@@ -1,5 +1,6 @@
 package com.comidaderuadev.api.entity.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 @SuperBuilder
 public class PedidoDTO {
+
+    @JsonProperty("idPedido")
     private int id;
     private String tipoPagamento;
     private LocalDateTime pedidoData;

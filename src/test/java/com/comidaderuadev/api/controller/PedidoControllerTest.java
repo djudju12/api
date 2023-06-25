@@ -116,7 +116,7 @@ class PedidoControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(pedidos.size())))
-                    .andExpect(jsonPath("$.[0].pedidoId", is(pedido.getId())))
+                    .andExpect(jsonPath("$.[0].idPedido", is(pedido.getId())))
                     .andExpect(jsonPath("$.[0].tipoPagamento", is(pedido.getTipoPagamento().getDescricao())));
 
             //then
@@ -131,7 +131,7 @@ class PedidoControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(pedidos.size())))
-                    .andExpect(jsonPath("$.[0].pedidoId", is(pedido.getId())))
+                    .andExpect(jsonPath("$.[0].idPedido", is(pedido.getId())))
                     .andExpect(jsonPath("$.[0].tipoPagamento", is(pedido.getTipoPagamento().getDescricao())))
                     .andExpect(jsonPath("$.[0].itens", hasSize(1)));
 
@@ -150,7 +150,7 @@ class PedidoControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.itens", hasSize(1)))
-                    .andExpect(jsonPath("$.pedidoId", is(pedido.getId())));
+                    .andExpect(jsonPath("$.idPedido", is(pedido.getId())));
 
             //then
             verify(pedidoService).findById(integerArgumentCaptor.capture());
