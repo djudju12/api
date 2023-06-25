@@ -8,9 +8,6 @@ import com.comidaderuadev.api.entity.produto.Produto;
 import com.comidaderuadev.api.service.CategoriaService;
 import com.comidaderuadev.api.service.ProdutoService;
 import com.comidaderuadev.api.utils.JsonWriter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -99,7 +96,7 @@ class ProdutoControllerTest {
 
                         Produto capturedProduto = invocationOnMock.getArgument(0);
                         return ProdutoDTO.builder()
-                                .produtoId(capturedProduto.getId())
+                                .id(capturedProduto.getId())
                                 .produtoDescricao(capturedProduto.getProdutoDescricao())
                                 .produtoValor(capturedProduto.getProdutoValor())
                                 .categoria(capturedProduto.getCategoria().getDescricao())
@@ -113,7 +110,7 @@ class ProdutoControllerTest {
                     .willAnswer( invocationOnMock -> {
                         ProdutoDTO capturedProdutoDTO = invocationOnMock.getArgument(0);
                         return Produto.builder()
-                                .id(capturedProdutoDTO.getProdutoId())
+                                .id(capturedProdutoDTO.getId())
                                 .produtoDescricao(capturedProdutoDTO.getProdutoDescricao())
                                 .produtoValor(capturedProdutoDTO.getProdutoValor())
                                 .categoria(categoriaService.findByDescricao(capturedProdutoDTO.getCategoria()))

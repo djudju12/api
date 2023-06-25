@@ -4,6 +4,7 @@ import com.comidaderuadev.api.entity.DTO.*;
 import com.comidaderuadev.api.entity.mapper.MapStructMapperPedidos;
 import com.comidaderuadev.api.entity.pedido.Pedido;
 import com.comidaderuadev.api.entity.pedido.TipoPagamento;
+import com.comidaderuadev.api.exceptions.NotFoundException;
 import com.comidaderuadev.api.service.ItensPedidoService;
 import com.comidaderuadev.api.service.PedidoService;
 import com.comidaderuadev.api.service.TipoPagamentoService;
@@ -20,7 +21,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
@@ -34,7 +34,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -117,7 +116,7 @@ class PedidoControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(pedidos.size())))
-                    .andExpect(jsonPath("$.[0].id", is(pedido.getId())))
+                    .andExpect(jsonPath("$.[0].pedidoId", is(pedido.getId())))
                     .andExpect(jsonPath("$.[0].tipoPagamento", is(pedido.getTipoPagamento().getDescricao())));
 
             //then
@@ -132,7 +131,7 @@ class PedidoControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(pedidos.size())))
-                    .andExpect(jsonPath("$.[0].id", is(pedido.getId())))
+                    .andExpect(jsonPath("$.[0].pedidoId", is(pedido.getId())))
                     .andExpect(jsonPath("$.[0].tipoPagamento", is(pedido.getTipoPagamento().getDescricao())))
                     .andExpect(jsonPath("$.[0].itens", hasSize(1)));
 
@@ -151,11 +150,28 @@ class PedidoControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.itens", hasSize(1)))
-                    .andExpect(jsonPath("$.id", is(pedido.getId())));
+                    .andExpect(jsonPath("$.pedidoId", is(pedido.getId())));
 
             //then
             verify(pedidoService).findById(integerArgumentCaptor.capture());
             assertThat(integerArgumentCaptor.getValue()).isEqualTo(pedido.getId());
+        }
+
+        @Test
+        void findByIdWithDetails_ThrowsNotFound() throws Exception {
+            //given
+            int NOT_FOUND = 404;
+            given(pedidoService.findById(anyInt())).willThrow(
+                    new NotFoundException("Pedido nao encontrado. Id:" + NOT_FOUND));
+
+            //when
+            mockMvc.perform(get("/pedidos/" + NOT_FOUND)
+                        .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.status").exists())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message").exists())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.timeStamp").exists());
+
         }
 
         @Test

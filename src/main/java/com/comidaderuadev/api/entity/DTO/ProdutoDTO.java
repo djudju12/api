@@ -2,8 +2,6 @@ package com.comidaderuadev.api.entity.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -17,7 +15,8 @@ public class ProdutoDTO {
     public ProdutoDTO() {}
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Id do produto", example = "26")
-    private int produtoId;
+    @JsonProperty("produtoId")
+    private int id;
 
     @Schema(description = "Identificador do produto", example = "Pão Árabe")
     @Size(min = 1, max = 200, message = "Descrição do produto deve possui de 1 até 200 caracteres.")
@@ -32,8 +31,8 @@ public class ProdutoDTO {
     private String categoria;
 
     @Builder
-    public ProdutoDTO(int produtoId, String produtoDescricao, double produtoValor, String categoria) {
-        this.produtoId = produtoId;
+    public ProdutoDTO(int id, String produtoDescricao, double produtoValor, String categoria) {
+        this.id = id;
         this.produtoDescricao = produtoDescricao;
         this.produtoValor = produtoValor;
         this.categoria = categoria;

@@ -5,9 +5,11 @@ import com.comidaderuadev.api.entity.produto.Produto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Objects;
 
@@ -16,6 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
 public class ItensPedido {
 
     @Id

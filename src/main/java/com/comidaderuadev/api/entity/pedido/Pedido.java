@@ -58,6 +58,8 @@ public class Pedido {
     }
 
     public void addProduto(ItensPedido item) {
+        if (itens == null)
+            itens = new ArrayList<>();
         itens.add(item);
     }
 

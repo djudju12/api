@@ -17,7 +17,7 @@ public interface MapStructMapperProdutos {
 
     MapStructMapperProdutos INSTANCE = Mappers.getMapper(MapStructMapperProdutos.class);
 
-    @Mapping(target = "produtoId", source = "id")
+    @Mapping(target = "id", source = "id")
     ProdutoDTO produtoToProdutoDTO(Produto produto);
 
     CategoriaDTO categoriaToCategoriaDTO(Categoria categoria);
